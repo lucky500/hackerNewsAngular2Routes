@@ -1,27 +1,28 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Post } from '../post.model';
+import { PostService } from '../post.service';
 
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
+  providers: [PostService]
 })
 
-export class HomeComponent {
+export class HomeComponent implements OnInit {
 
-  constructor(private router: Router) {
+  posts: Post[];
+
+  constructor(private router: Router, private postService: PostService) {
 
   }
 
-  posts: Post[] = [
-    new Post(1, "Unity 3D in Docker", "link", "author1"),
-    new Post(2, "Unity 3D in Docker", "link", "author2"),
-    new Post(3, "Unity 3D in Docker", "link", "author3"),
-    new Post(4, "Unity 3D in Docker", "link", "author4"),
-  ];
+  ngOnInit(){
+    this.posts = this.postService.getPosts();
+  }
 
   goToDetailPage(clickedPost: Post){
     this.router.navigate(['posts', clickedPost.id]);
